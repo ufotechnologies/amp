@@ -1,0 +1,231 @@
+---
+---
+@charset "utf-8";
+
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web:300');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+
+@font-face {
+    font-family: 'icomoon';
+    src:  url('{{ site.cdn }}/assets/fonts/icomoon.eot?nxeiw0');
+    src:  url('{{ site.cdn }}/assets/fonts/icomoon.eot?nxeiw0#iefix') format('embedded-opentype'),
+          url('{{ site.cdn }}/assets/fonts/icomoon.ttf?nxeiw0') format('truetype'),
+          url('{{ site.cdn }}/assets/fonts/icomoon.woff?nxeiw0') format('woff'),
+          url('{{ site.cdn }}/assets/fonts/icomoon.svg?nxeiw0#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-heart-o:before {
+    content: "\f08a";
+}
+.icon-twitter:before {
+    content: "\f099";
+}
+.icon-slack:before {
+    content: "\f198";
+}
+
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    color: white;
+    background-color: #101010;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .8);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+a {
+    color: white;
+    opacity: .2;
+    text-decoration: none;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .8);
+    transition: all .2s ease-in-out;
+
+    &:hover,
+    &:focus {
+        color: white;
+        opacity: 1;
+        text-decoration: none;
+    }
+}
+
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+strong {
+    font-weight: 700;
+}
+
+li {
+    list-style-type: none;
+}
+
+hr {
+    opacity: .2;
+}
+
+pre {
+    color: white;
+    background-color: #101010;
+    border: none;
+    text-shadow: none;
+}
+
+.jellybean {
+    line-height: 32px;
+
+    img {
+        margin-right: 10px;
+    }
+
+    span {
+        vertical-align: middle;
+    }
+}
+
+.intro {
+    display: block;
+    width: 100%;
+    height: 576px;
+    background: url('{{ site.cdn }}/assets/images/background.png') no-repeat top center scroll;
+    background-size: cover;
+    overflow: hidden;
+
+    .jellybeans {
+        display: none;
+    }
+
+    @media (min-width: 1025px) {
+        height: 100%;
+
+        .jellybeans {
+            display: block;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 32px 48px 0 0;
+        }
+    }
+}
+
+.content-section {
+    padding: 48px 0 0;
+}
+
+#jellybeans {
+    display: block;
+
+    .content-section {
+        padding: 32px 0 0;
+    }
+
+    @media (min-width: 768px) {
+        .content-section {
+            width: 50%;
+            margin: 0 auto;
+        }
+    }
+
+    @media (min-width: 1025px) {
+        display: none;
+    }
+}
+
+.logo {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    a {
+        opacity: 1;
+    }
+
+    img {
+        width: 48px;
+        height: 48px;
+        margin-right: 5px;
+    }
+
+    span {
+        font-family: 'Titillium Web', sans-serif;
+        font-weight: 300;
+        font-size: 24px;
+        line-height: 48px;
+        vertical-align: middle;
+    }
+
+    @media (min-width: 1025px) {
+        left: 10px;
+        right: auto;
+    }
+}
+
+.spotify {
+    opacity: 1;
+
+    img {
+        width: 70px;
+        height: 22px;
+    }
+}
+
+.legal {
+    margin: 32px 15px 15px 0;
+    text-align: right;
+
+    @media (min-width: 1025px) {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+.legal a.heart:hover:before {
+    content: 'Made with ';
+}
+
+.legal a.heart:hover:after {
+    content: ' in Toronto, Canada';
+}

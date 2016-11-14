@@ -1,0 +1,279 @@
+---
+---
+@charset "utf-8";
+
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web:300');
+@import url('https://fonts.googleapis.com/css?family=Lato:400');
+
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 19px;
+    color: white;
+    background-color: #101010;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .8);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    border: 0;
+    vertical-align: middle;
+}
+
+a {
+    color: white;
+    opacity: .2;
+    text-decoration: none;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .8);
+    transition: all .2s ease-in-out;
+
+    &:hover,
+    &:focus {
+        color: white;
+        opacity: 1;
+        text-decoration: none;
+    }
+}
+
+span {
+    opacity: .5;
+}
+
+.container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.table {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.table-cell {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.cover {
+    width: 560px;
+    height: 560px;
+    margin: 0 auto 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0;
+}
+
+.amp .name {
+    font-size: 26px;
+    line-height: 32px;
+}
+
+.amp .text {
+    font-size: 24px;
+    line-height: 32px;
+}
+
+.sidebar {
+    position: absolute;
+    width: 400px;
+    top: 20px;
+    right: 20px;
+    bottom: 20px;
+    padding-top: 20px;
+    overflow: auto;
+}
+
+.requests .request {
+    position: relative;
+    height: 56px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    clear: left;
+    overflow: hidden;
+
+    &.notrack:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: linear-gradient(to bottom right, rgba(16, 16, 16, 0), rgba(16, 16, 16, 0.6), rgba(16, 16, 16, 0.6), rgba(16, 16, 16, 0));
+    }
+
+    img {
+        float: left;
+        width: 56px;
+        height: 56px;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    .name, .text {
+        margin-right: 10px;
+        margin-left: 20px;
+    }
+}
+
+.fadein {
+    animation: fadein 1s;
+    opacity: 1;
+}
+@keyframes fadein {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.fadeout {
+    animation: fadeout 1s;
+    opacity: 0;
+}
+@keyframes fadeout {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.raise {
+    animation: raise 500ms;
+}
+@keyframes raise {
+    0%   { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0px); }
+}
+
+.drop {
+    animation: drop 500ms;
+}
+@keyframes drop {
+    0%   { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0px); }
+}
+
+.preloader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(16, 16, 16, .95);
+
+    .spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: block;
+        width: 100px;
+        height: 100px;
+        margin-top: -50px;
+        margin-left: -50px;
+        animation: spin 2.5s infinite linear;
+        border: 3px solid transparent;
+        border-top-color: #303030;
+        border-radius: 50%;
+
+        &:before, &:after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        &:before {
+            top: 5px;
+            right: 5px;
+            bottom: 5px;
+            left: 5px;
+            animation: spin 2s infinite linear;
+            border: 3px solid transparent;
+            border-top-color: #80cbc4;
+        }
+
+        &:after {
+            top: 15px;
+            right: 15px;
+            bottom: 15px;
+            left: 15px;
+            animation: spin 1s infinite linear;
+            border: 3px solid transparent;
+            border-top-color: white;
+        }
+    }
+
+    .message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: block;
+        width: 140px;
+        height: 19px;
+        margin-top: 70px;
+        margin-left: -65px;
+        text-align: center;
+    }
+}
+
+@keyframes spin {
+    0%   { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+
+.logo {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+
+    a {
+        opacity: 1;
+    }
+
+    img {
+        width: 48px;
+        height: 48px;
+        margin-right: 5px;
+    }
+
+    span {
+        font-family: 'Titillium Web', sans-serif;
+        font-weight: 300;
+        font-size: 24px;
+        line-height: 48px;
+        vertical-align: middle;
+        opacity: 1;
+    }
+}
+
+.spotify {
+    opacity: 1;
+
+    img {
+        width: 70px;
+        height: 22px;
+    }
+}
+
+.legal {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    text-align: right;
+}

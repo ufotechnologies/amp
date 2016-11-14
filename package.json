@@ -1,0 +1,32 @@
+{
+  "name": "amp",
+  "version": "1.0.0",
+  "description": "Amp",
+  "homepage": "https://ufo.ai/amp/",
+  "keywords": [
+    "music",
+    "slack",
+    "bot",
+    "twitter",
+    "jukebox",
+    "spotify"
+  ],
+  "author": "Patrick Schroen <ps@ufotechnologies.com> (https://ufo.ai/)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ufotechnologies/amp"
+  },
+  "bugs": {
+    "url": "https://github.com/ufotechnologies/amp/issues"
+  },
+  "license": "MIT",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "node-static": "*",
+    "socket.io": "*"
+  }
+}

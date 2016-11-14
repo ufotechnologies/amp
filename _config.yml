@@ -1,0 +1,15 @@
+# Site settings
+title: "Amp"
+description: Your music playing Slack bot.
+keywords: request, music, slack, bot, twitter, jukebox, google cse, spelling correction, google cast, chromecast, spotify, playlist, trackset
+author: "Patrick Schroen"
+email: ps@ufotechnologies.com
+url: "https://ufo.ai/amp/"
+cdn: "https://ufo.ai/amp"
+share_title: Play music with Slack and Spotify
+share_description: User generated playlists and party starter! :)
+twitter_username: pschroen
+ga_ua_id: "UA-51047442-1"
+
+# Build settings
+markdown: kramdown
