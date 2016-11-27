@@ -8,13 +8,32 @@
 /* jshint strict:true, eqeqeq:true, newcap:false, multistr:true, expr:true, loopfunc:true, shadow:true, node:true, indent:4 */
 "use strict";
 
-var file = new (require('node-static')).Server('_site'),
-    app = require('http').createServer(handler),
-    io = require('socket.io')(app),
-    fs = require('fs'),
+var fs = require('fs'),
+    http = require('http'),
+    https = require('https'),
+    secure = fs.existsSync(__dirname + '/amp-key.pem'),
+    server = secure ? https.createServer({
+        key: fs.readFileSync(__dirname + '/amp-key.pem'),
+        cert: fs.readFileSync(__dirname + '/amp-cert.pem')
+    }, handler) : http.createServer(handler),
+    io = require('socket.io')(server),
+    url = require('url'),
+    querystring = require('querystring'),
+    request = require('request'),
+    crypto = require('crypto'),
+    file = new (require('node-static')).Server('_site'),
     trackers = {};
 
-app.listen(process.env.PORT || 3000);
+if (secure) {
+    http.createServer(function (req, res) {
+        req.on('end', function (error) {
+            res.writeHead(308, {'Location': 'https://' + req.headers.host + req.url});
+            res.end();
+        }).resume();
+    }).listen(process.env.PORT || 3000);
+}
+
+server.listen(secure ? 8443 : process.env.PORT || 3000);
 
 function handler(req, res) {
     var body = '';
@@ -24,7 +43,23 @@ function handler(req, res) {
         if (!body.length) {
             var pathname = req.url.split(/[?#]/)[0];
             if (pathname !== '/') {
-                if (pathname === '/privacy' || pathname === '/privacy/') {
+                if (pathname === '/oauth') {
+                    var options = {
+                            url: 'https://slack.com/api/oauth.access',
+                            form: 'client_id=' + process.env.SLACK_CLIENT_ID + '&client_secret=' + process.env.SLACK_CLIENT_SECRET + '&code=' + querystring.parse(url.parse(req.url).query).code
+                        };
+                    request.post(options, function (error, response, body) {
+                        var access = JSON.parse(body);
+                        if (access.bot) {
+                            var crypted = cbcEncrypt(access.bot.bot_access_token, process.env.CRYPTO_KEY, process.env.CRYPTO_IV);
+                            res.writeHead(200, 'OK', {'Content-Type': 'text/html'});
+                            res.write(fs.readFileSync(__dirname + '/_site/token.html').toString().replace('<p></p>', '<p>' + crypted + (req.headers['user-agent'].match(/Android/i) ? '<br><a href="intent://token/?' + crypted + '#Intent;scheme=amp;package=ai.ufo.amp;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dai.ufo.amp;end">Open in Amp</a>' : '') + '</p>'));
+                        } else {
+                            res.writeHead(302, {'Location': 'https://play.google.com/store/apps/details?id=ai.ufo.amp'});
+                        }
+                        res.end();
+                    });
+                } else if (pathname === '/privacy' || pathname === '/privacy/') {
                     file.serveFile('privacy/index.html', 200, {}, req, res);
                 } else if (pathname === '/licenses' || pathname === '/licenses/') {
                     file.serveFile('licenses/index.html', 200, {}, req, res);
@@ -71,3 +106,13 @@ io.on('connection', function (socket) {
     }
     socket.emit('track', {nowplaying:trackers[pathname].nowplaying, tracks:trackers[pathname].tracks});
 });
+
+function cbcEncrypt(data, secretKey, iv) {
+    secretKey = new Buffer(secretKey, 'utf8');
+    secretKey = crypto.createHash('md5').update(secretKey).digest('hex');
+    secretKey = new Buffer(secretKey, 'hex');
+    var cipher = crypto.createCipheriv('aes-128-cbc', secretKey, new Buffer(iv, 'utf8')), coder = [];
+    coder.push(cipher.update(data, 'utf8', 'base64'));
+    coder.push(cipher.final('base64'));
+    return coder.join('');
+}

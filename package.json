@@ -1,6 +1,6 @@
 {
   "name": "amp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Amp",
   "homepage": "https://ufo.ai/amp/",
   "keywords": [
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "node-static": "*",
+    "request": "*",
     "socket.io": "*"
   }
 }

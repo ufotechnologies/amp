@@ -2,3 +2,4 @@
 .elasticbeanstalk
 node_modules
 _site
+*.pem

@@ -127,6 +127,12 @@ pre {
 
 .badges {
     margin-top: 10px;
+    text-align: right;
+    white-space: nowrap;
+
+    @media (min-width: 1025px) {
+        margin-left: 59px;
+    }
 }
 
 .intro {
@@ -232,4 +238,10 @@ pre {
 
 .legal a.heart:hover:after {
     content: ' in Toronto, Canada';
+}
+
+#token {
+    p {
+        text-shadow: none;
+    }
 }

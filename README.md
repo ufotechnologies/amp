@@ -32,6 +32,9 @@ Please file feedback about missing features or bugs over at our [issue tracker](
 * Al Rayhan's [Dark Material UI Design](https://dribbble.com/shots/2355418-Dark-Material-UI-Design)
 * Al Rayhan's [Free Psd Dark UI Mock-up](https://dribbble.com/shots/2104061-Free-Psd-Dark-UI-Mock-up)
 * DeviserWeb's [page preloader](http://deviserweb.com/) for the receivers
+* Slack [Using OAuth 2.0](https://api.slack.com/docs/oauth)
+* [Slack Button](https://api.slack.com/docs/slack-button)
+* Google Chrome [Android Intents with Chrome](https://developer.chrome.com/multidevice/android/intents)
 
 ## Links
 
