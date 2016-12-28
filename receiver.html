@@ -248,6 +248,7 @@ function none() {
     sidebar.getElementsByClassName('requests')[0].innerHTML = '';
     amp.className = 'amp raise';
     amp.innerHTML = '<div class="name">What the junk, no music!?<br>&nbsp;<br>Get the party started with a request and do it up!</div>';
+    nowplaying = null;
     tracks = [];
     setTimeout(function () {
         amp.className = 'amp';
