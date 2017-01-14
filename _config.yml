@@ -6,6 +6,7 @@ author: "Patrick Schroen"
 email: ps@ufo.ai
 url: "https://ufo.ai/amp/"
 cdn: "https://ufo.ai/amp"
+app_id: ai.ufo.amp
 share_title: Play music with Slack and Spotify
 share_description: User generated playlists and party starter! :)
 twitter_username: pschroen
