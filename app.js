@@ -11,17 +11,25 @@
 var fs = require('fs'),
     http = require('http'),
     https = require('https'),
+    connect = require('connect'),
+    session = require('cookie-session'),
+    app = connect(),
     secure = fs.existsSync(__dirname + '/amp-key.pem'),
     server = secure ? https.createServer({
         key: fs.readFileSync(__dirname + '/amp-key.pem'),
         cert: fs.readFileSync(__dirname + '/amp-cert.pem')
-    }, handler) : http.createServer(handler),
+    }, app) : http.createServer(app),
     io = require('socket.io')(server),
     url = require('url'),
     querystring = require('querystring'),
     request = require('request'),
     crypto = require('crypto'),
     file = new (require('node-static')).Server('_site'),
+    twitter = new (require('node-twitter-api'))({
+        consumerKey: process.env.TWITTER_CONSUMER_KEY,
+        consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+        callback: 'https://amp.ufo.ai/twitter/oauth'
+    }),
     trackers = {};
 
 if (secure) {
@@ -33,9 +41,9 @@ if (secure) {
     }).listen(process.env.PORT || 3000);
 }
 
-server.listen(secure ? 8443 : process.env.PORT || 3000);
+app.use(session({secret:process.env.COOKIE_SECRET}));
 
-function handler(req, res) {
+app.use(function (req, res) {
     var body = '';
     req.on('data', function (chunk) {
         body += chunk;
@@ -43,7 +51,7 @@ function handler(req, res) {
         if (!body.length) {
             var pathname = req.url.split(/[?#]/)[0];
             if (pathname !== '/') {
-                if (pathname === '/oauth') {
+                if (pathname === '/oauth' || pathname === '/slack/oauth') {
                     var options = {
                             url: 'https://slack.com/api/oauth.access',
                             form: 'client_id=' + process.env.SLACK_CLIENT_ID + '&client_secret=' + process.env.SLACK_CLIENT_SECRET + '&code=' + querystring.parse(url.parse(req.url).query).code
@@ -59,6 +67,30 @@ function handler(req, res) {
                         }
                         res.end();
                     });
+                } else if (pathname === '/twitter/oauth/authorize') {
+                    twitter.getRequestToken(function (error, requestToken, requestTokenSecret, results) {
+                        if (!error) {
+                            req.session.requestToken = requestToken;
+                            req.session.requestTokenSecret = requestTokenSecret;
+                            res.writeHead(302, {'Location': 'https://api.twitter.com/oauth/authenticate?oauth_token=' + requestToken});
+                        } else {
+                            res.writeHead(302, {'Location': 'https://play.google.com/store/apps/details?id=ai.ufo.amp'});
+                        }
+                        res.end();
+                    });
+                } else if (pathname === '/twitter/oauth') {
+                    twitter.getAccessToken(req.session.requestToken, req.session.requestTokenSecret, querystring.parse(url.parse(req.url).query).oauth_verifier, function (error, accessToken, accessTokenSecret, results) {
+                        if (!error) {
+                            var crypted = cbcEncrypt(accessToken + '\n' + accessTokenSecret, process.env.CRYPTO_KEY, process.env.CRYPTO_IV);
+                            res.writeHead(200, 'OK', {'Content-Type': 'text/html'});
+                            res.write(fs.readFileSync(__dirname + '/_site/token.html').toString().replace('<p></p>', '<p>' + crypted + (req.headers['user-agent'].match(/Android/i) ? '<br><a href="intent://token/?' + crypted + '#Intent;scheme=amp;package=ai.ufo.amp;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dai.ufo.amp;end">Open in Amp</a>' : '') + '</p>').replace('Slack bot', 'Twitter bot').replace('guide_amp_online.png', 'jellybean_twitter.png'));
+                        } else {
+                            res.writeHead(302, {'Location': 'https://play.google.com/store/apps/details?id=ai.ufo.amp'});
+                        }
+                        res.end();
+                    });
+                } else if (pathname === '/support' || pathname === '/support/') {
+                    file.serveFile('support/index.html', 200, {}, req, res);
                 } else if (pathname === '/privacy' || pathname === '/privacy/') {
                     file.serveFile('privacy/index.html', 200, {}, req, res);
                 } else if (pathname === '/licenses' || pathname === '/licenses/') {
@@ -91,7 +123,9 @@ function handler(req, res) {
             res.end('OK\n');
         }
     }).resume();
-}
+});
+
+server.listen(secure ? 8443 : process.env.PORT || 3000);
 
 io.on('connection', function (socket) {
     var pathname = socket.request._query.pathname.substring(1);
