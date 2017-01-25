@@ -99,10 +99,6 @@ strong {
     font-weight: 700;
 }
 
-li {
-    list-style-type: none;
-}
-
 hr {
     opacity: .2;
 }
@@ -295,5 +291,11 @@ pre {
                 }
             }
         }
+    }
+}
+
+#licenses {
+    li {
+        list-style-type: none;
     }
 }
